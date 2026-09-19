@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Thai Home Stormwater Lab — Beta</title>
+  <meta name="description" content="เครื่องมือสองภาษาสำหรับทดลองเปรียบเทียบการจัดการน้ำฝนภายในบ้าน">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230b74b8'/%3E%3Cpath d='M32 10C24 22 18 29 18 39a14 14 0 0 0 28 0c0-10-6-17-14-29Z' fill='%23fff'/%3E%3Cpath d='M23 43c7 4 15 4 22-1-2 7-6 11-13 11-5 0-8-3-9-10Z' fill='%2336c98f'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="water-balance.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="Thai Home Stormwater Lab"><span class="brand-mark">◒</span><span>Thai Home Stormwater Lab <b>Beta</b></span></a>
+    <nav class="mini-nav"><a href="#calculator" data-i18n="navCalc">เครื่องคำนวณ</a><a href="#method" data-i18n="navMethod">วิธีคำนวณ</a></nav>
+    <div class="lang-switch" role="group" aria-label="Language"><button id="thBtn" class="active" type="button">TH</button><span>|</span><button id="enBtn" type="button">EN</button></div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow" data-i18n="eyebrow">เครื่องมือทดลองสำหรับบ้านในประเทศไทย</p>
+        <h1 data-i18n="heroTitle">การรับมือน้ำท่วม<br>เริ่มได้จากพื้นที่บ้านของเรา</h1>
+        <p class="hero-text" data-i18n="heroText">ดูว่าบ้านของคุณสร้างน้ำไหลบ่าเท่าไร และการปรับพื้นที่เล็ก ๆ สามารถช่วยลดและชะลอน้ำที่ต้องระบายออกในช่วงฝนหนักได้อย่างไร</p>
+        <div class="beta-note"><span>β</span><p data-i18n="heroNote">รุ่น Beta นี้เปรียบเทียบสมดุลน้ำของเหตุการณ์ฝน ไม่ได้ทำนายว่าพื้นที่จะน้ำท่วมหรือไม่</p></div>
+      </div>
+      <div class="flow-card" aria-label="Water flow concept">
+        <div class="cloud">☁<i></i><i></i><i></i></div>
+        <div class="home-icon">⌂</div>
+        <div class="flow-line"><span class="tank-icon">▣</span><span class="garden-icon">✦</span><span class="drain-icon">≈</span></div>
+        <div class="flow-labels"><span data-i18n="flowStore">เก็บ</span><span data-i18n="flowSoak">ซึม</span><span data-i18n="flowSlow">ชะลอ</span></div>
+      </div>
+    </section>
+
+    <section id="calculator" class="workspace">
+      <div class="steps">
+        <article class="panel" id="step1">
+          <div class="step-head"><span>01</span><div><h2 data-i18n="step1">พื้นที่บ้านของคุณ</h2><p data-i18n="step1Sub">แบ่งพื้นที่ทั้งหมดให้ครบ 100%</p></div></div>
+          <label class="field"><span data-i18n="siteArea">พื้นที่ดินทั้งหมด (m²)</span><input id="siteArea" type="number" min="0" max="100000" step="1" value="400"></label>
+          <div id="allocation" class="allocation"></div>
+          <div class="total-row"><span data-i18n="totalAllocation">รวมการจัดสรรพื้นที่</span><strong id="allocationTotal">100%</strong></div>
+          <p id="allocationError" class="error hidden" role="alert"></p>
+        </article>
+
+        <article class="panel" id="step2">
+          <div class="step-head"><span>02</span><div><h2 data-i18n="step2">ฝนที่ต้องการทดสอบ</h2><p data-i18n="step2Sub">Bangkok · เลือก preset หรือกำหนดเอง</p></div></div>
+          <div class="rain-status verified"><span class="status-dot"></span><div><strong data-i18n="rainDataTitle">Bangkok Beta rainfall presets</strong><p data-i18n="rainDataText">อ้างอิงข้อมูลฝนออกแบบของกรุงเทพมหานคร</p></div></div>
+          <div class="rain-tabs" role="tablist"><button id="standardBtn" type="button" data-i18n="standardRain">ฝนออกแบบมาตรฐาน</button><button id="heavyBtn" type="button" data-i18n="heavyRain">ฝนหนัก</button><button id="customBtn" type="button" class="active" data-i18n="advanced">กำหนดเอง</button></div>
+          <label class="field"><span data-i18n="rainDepth">ปริมาณฝนทดสอบ (mm)</span><input id="rainfall" type="number" min="0" max="2000" step="0.1" value="58.7"></label>
+          <details open><summary data-i18n="advancedDetails">รายละเอียดฝน</summary><div class="two-fields"><label class="field"><span data-i18n="duration">ระยะเวลา (ชั่วโมง)</span><input id="duration" type="number" min="0.1" step="0.1" value="1"></label><label class="field"><span data-i18n="returnPeriod">คาบอุบัติซ้ำ (ปี)</span><input id="returnPeriod" type="number" min="0" step="1" placeholder="—"></label></div><p class="helper" data-i18n="advancedNote">ระยะเวลา 1 ชั่วโมงเป็น preset เพื่อเปรียบเทียบแนวคิดเบื้องต้น ไม่ได้หมายความว่า BMA กำหนดให้บ้านทุกหลังต้องใช้ฝน 1 ชั่วโมง</p></details>
+          <div class="rain-volume"><span data-i18n="rainFalling">ฝนที่ตกบนพื้นที่</span><strong id="rainVolume">23,480 L</strong><small id="rainFormula">400 m² × 58.7 mm</small></div>
+        </article>
+
+        <article class="panel wide" id="step3">
+          <div class="step-head"><span>03</span><div><h2 data-i18n="step3">ปรับพื้นที่ของคุณ</h2><p data-i18n="step3Sub">วิธีจัดการน้ำฝน / Stormwater Design Options</p></div></div>
+          <div id="measures" class="measure-grid">
+            <div class="measure"><label class="measure-title"><input type="checkbox"><span class="measure-icon">▥</span><span><strong>ถังเก็บน้ำฝน</strong><small>Rainwater Tank</small></span></label></div>
+            <div class="measure"><label class="measure-title"><input type="checkbox"><span class="measure-icon">✿</span><span><strong>สวนรับน้ำฝน</strong><small>Rain Garden</small></span></label></div>
+            <div class="measure"><label class="measure-title"><input type="checkbox"><span class="measure-icon">▦</span><span><strong>พื้นซึมน้ำ</strong><small>Permeable Pavement</small></span></label></div>
+            <div class="measure"><label class="measure-title"><input type="checkbox"><span class="measure-icon">↧</span><span><strong>ถังหน่วงน้ำ</strong><small>Detention Tank</small></span></label></div>
+            <div class="measure"><label class="measure-title"><input type="checkbox"><span class="measure-icon">⌂</span><span><strong>หลังคาเขียว</strong><small>Green Roof</small></span></label></div>
+          </div>
+        </article>
+      </div>
+
+      <aside class="results" aria-live="polite">
+        <div class="results-head"><p class="eyebrow" data-i18n="results">ผลการทดลอง</p><h2 data-i18n="eventBalance">ภาพรวมของฝนครั้งนี้</h2></div>
+        <div class="result-primary"><span data-i18n="rainProperty">ฝนที่ตกบนพื้นที่</span><strong id="resRain">23,480 L</strong></div>
+        <div class="comparison">
+          <div><span data-i18n="currentDesign">แบบปัจจุบัน</span><small data-i18n="baselineRunoff">น้ำไหลบ่าที่ออกจากพื้นที่</small><strong id="resCurrent">23,080 L</strong></div>
+          <div><span data-i18n="proposedDesign">แบบทดลอง</span><small data-i18n="proposedRunoff">น้ำที่ออกระหว่างฝนที่ทดสอบ</small><strong id="resProposed">23,080 L</strong></div>
+        </div>
+        <div class="reduction"><span data-i18n="estimatedReduction">น้ำที่ไม่ต้องออกจากพื้นที่ทันที</span><strong id="resReduction">400 L</strong></div>
+        <div class="balance-bar" id="balanceBar"></div>
+        <div class="legend" id="legend"></div>
+        <p class="assumption" data-i18n="balanceNote">น้ำที่หน่วงไว้ยังอยู่ในสมดุลน้ำและอาจระบายออกภายหลัง เครื่องมือนี้ยังไม่คำนวณ peak flow หรืออัตราการไหล L/s</p>
+      </aside>
+    </section>
+
+    <section class="interpretation" id="interpretation">
+      <p class="eyebrow" data-i18n="interpretEyebrow">แปลผลให้เข้าใจง่าย</p>
+      <h2 data-i18n="interpretTitle">บ้านของคุณช่วยอะไรได้บ้าง?</h2>
+      <p id="interpretSummary" class="lead"></p>
+      <div id="contributions" class="contributions"></div>
+      <p class="broad-message" data-i18n="broadMessage">บ้านหนึ่งหลังไม่สามารถป้องกันน้ำท่วมทั้งเมืองได้ แต่การเก็บ ซึม และชะลอน้ำภายในพื้นที่ก่อนเข้าสู่ระบบระบายน้ำ สามารถช่วยลดภาระของระบบระบายน้ำในช่วงฝนหนักได้</p>
+    </section>
+
+    <section id="method" class="methodology">
+      <div><p class="eyebrow" data-i18n="methodEyebrow">ความโปร่งใสของข้อมูล</p><h2 data-i18n="methodTitle">วิธีการคำนวณ</h2></div>
+      <div class="method-flow"><span data-i18n="thaiData">ข้อมูลฝน + ดิน + ภูมิอากาศ + พื้นที่ของไทย</span><b>→</b><span data-i18n="longTermEngine">ระยะยาว: EPA SWMM</span><b>→</b><span data-i18n="simpleResults">ผลลัพธ์ที่เจ้าของบ้านเข้าใจง่าย</span></div>
+      <div class="method-cards">
+        <div><strong data-i18n="thaiSource">Bangkok / Thai source</strong><p data-i18n="thaiSourceText">ฝน 58.7 mm (2 ปี, 1 ชั่วโมง) และ 76.0 mm (5 ปี, 1 ชั่วโมง) อ้างอิงข้อมูลฝนออกแบบของกรุงเทพมหานคร ส่วน Ksat ดินเดิม 2.5 mm/hr เป็นสมมติฐานนำร่อง ไม่ใช่ค่าของทุกแปลง</p></div>
+        <div><strong data-i18n="tropicalReference">Tropical reference</strong><p data-i18n="tropicalReferenceText">สวนรับน้ำฝนใช้โปรไฟล์ bioretention แบบเขตร้อน ไม่ใช่มาตรฐานกฎหมายไทย</p></div>
+        <div><strong data-i18n="internationalReference">International prototype reference</strong><p data-i18n="internationalReferenceText">พื้นซึมน้ำและหลังคาเขียวใช้โปรไฟล์ต้นแบบอ้างอิง EPA ไม่ใช่ข้อกำหนดก่อสร้างไทย</p></div>
+        <div><strong data-i18n="userInput">User-supplied input</strong><p data-i18n="userInputText">พื้นที่ สัดส่วนพื้นผิว ขนาดมาตรการ ความจุว่างในถัง และค่าฝน Custom มาจากผู้ใช้</p></div>
+      </div>
+      <p class="method-note" data-i18n="methodDetail">Beta นี้เป็นสมดุลน้ำรายเหตุการณ์ โดยแยกการซึม การเก็บใช้ การกักในชั้นวัสดุ การหน่วง และน้ำที่ออกจากพื้นที่ และจัดสรรพื้นที่ต้นทางเพื่อไม่ให้น้ำก้อนเดียวถูกนับซ้ำ สำหรับ Rain Garden น้ำที่ media รับได้แต่ยังไม่ซึมลงดินเดิมแสดงเป็นน้ำกักชั่วคราวระหว่างเหตุการณ์และอาจระบายภายหลัง</p>
+      <p class="method-note" data-i18n="initialStorageNote">สำหรับการเปรียบเทียบ Beta ชั้นกักเก็บของพื้นซึมน้ำและหลังคาเขียวถือว่ามีพื้นที่ว่างเต็มที่ก่อนฝนเริ่ม ส่วนถังเก็บน้ำใช้ค่าพื้นที่ว่างที่ผู้ใช้เลือก</p>
+    </section>
+
+    <section class="disclaimer">
+      <h2 data-i18n="disclaimerTitle">ขอบเขตของเครื่องมือ</h2>
+      <p data-i18n="disclaimerIntro">เครื่องมือนี้ใช้เพื่อการเรียนรู้และเปรียบเทียบแนวทางออกแบบเบื้องต้นเท่านั้น โดยไม่ได้:</p>
+      <ul id="disclaimerList"></ul>
+    </section>
+  </main>
+  <footer><span>Thai Home Stormwater Lab — Beta</span><span data-i18n="footer">Educational early-design comparison tool</span></footer>
+  <script src="app.js?v=4"></script>
+</body>
+</html>

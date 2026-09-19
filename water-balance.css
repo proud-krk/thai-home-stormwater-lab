@@ -1,0 +1,10 @@
+.rain-status.verified{background:var(--mint);border-color:#bfe8d6}
+.rain-status.verified .status-dot{background:var(--green)}
+.method-cards{grid-template-columns:repeat(2,1fr)}
+.method-cards p{opacity:.82}
+.method-note{margin:18px 0 0;padding:18px;border-left:3px solid #6ce0b2;background:rgba(255,255,255,.06);border-radius:0 14px 14px 0;font-size:14px}
+.field select{width:100%;border:1px solid #c9dce3;border-radius:12px;background:white;padding:11px 13px;color:var(--ink);font-size:16px;outline:none}
+.tank-availability{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.measure-metrics{grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap;margin-top:2px}
+.measure-metrics span{padding:5px 9px;border-radius:8px;background:var(--sky);color:var(--navy);font-size:12px;font-weight:600}
+@media(max-width:650px){.method-cards,.tank-availability{grid-template-columns:1fr}}
